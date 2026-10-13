@@ -18,6 +18,41 @@ const __dirname = dirname(__filename);
 // Path to the Python client script
 const PYTHON_CLIENT = join(__dirname, "..", "python", "iterm2_client.py");
 
+// Some MCP clients send arguments under a different key name or as a JSON
+// string. Map common variants back to session_id so tool calls don't fail.
+const SESSION_ID_ALIASES = [
+  "sessionId",
+  "sessionID",
+  "session-id",
+  "session id",
+  "session",
+  "pane_id",
+  "paneId",
+  "pane",
+  "id",
+];
+
+function normalizeArgs(raw: unknown): Record<string, unknown> {
+  let args: unknown = raw;
+  if (typeof args === "string") {
+    try {
+      args = JSON.parse(args);
+    } catch {
+      args = {};
+    }
+  }
+  const out: Record<string, unknown> = { ...((args as object) ?? {}) };
+  if (!out.session_id) {
+    for (const key of SESSION_ID_ALIASES) {
+      if (out[key]) {
+        out.session_id = out[key];
+        break;
+      }
+    }
+  }
+  return out;
+}
+
 interface PythonResult {
   error?: string;
   message?: string;
@@ -279,7 +314,9 @@ function createServer(): Server {
 
   // Handle tool calls
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    const { name, arguments: args } = request.params;
+    const { name } = request.params;
+    const args = normalizeArgs(request.params.arguments);
+    console.error(`[iterm2] tools/call ${name} args: ${JSON.stringify(request.params.arguments)}`);
 
     try {
       switch (name) {
