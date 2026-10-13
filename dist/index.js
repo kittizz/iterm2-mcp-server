@@ -161,12 +161,12 @@ function createServer() {
                     inputSchema: {
                         type: "object",
                         properties: {
-                            session_id: {
+                            pane: {
                                 type: "string",
                                 description: "The pane ID - use shorthand like 't5p2' (tab 5, pane 2) or 'w1t5p2' (window 1, tab 5, pane 2). Numbers are 1-based to match iTerm2's UI.",
                             },
                         },
-                        required: ["session_id"],
+                        required: ["pane"],
                     },
                 },
                 {
@@ -193,7 +193,7 @@ function createServer() {
                     inputSchema: {
                         type: "object",
                         properties: {
-                            session_id: {
+                            pane: {
                                 type: "string",
                                 description: "The pane ID - use shorthand like 't5p2' (tab 5, pane 2) or 'w1t5p2'. Numbers are 1-based.",
                             },
@@ -207,7 +207,7 @@ function createServer() {
                                 default: true,
                             },
                         },
-                        required: ["session_id", "text"],
+                        required: ["pane", "text"],
                     },
                 },
                 {
@@ -216,7 +216,7 @@ function createServer() {
                     inputSchema: {
                         type: "object",
                         properties: {
-                            session_id: {
+                            pane: {
                                 type: "string",
                                 description: "The pane ID - use shorthand like 't5p2' (tab 5, pane 2) or 'w1t5p2'. Numbers are 1-based.",
                             },
@@ -226,7 +226,7 @@ function createServer() {
                                 description: "The control character to send: 'c' for Ctrl+C (interrupt/SIGINT), 'd' for Ctrl+D (EOF/logout), 'z' for Ctrl+Z (suspend/SIGTSTP), 'l' for Ctrl+L (clear screen).",
                             },
                         },
-                        required: ["session_id", "control"],
+                        required: ["pane", "control"],
                     },
                 },
                 {
@@ -235,7 +235,7 @@ function createServer() {
                     inputSchema: {
                         type: "object",
                         properties: {
-                            session_id: {
+                            pane: {
                                 type: "string",
                                 description: "The pane ID - use shorthand like 't5p2' (tab 5, pane 2) or 'w1t5p2'. Numbers are 1-based.",
                             },
@@ -245,7 +245,7 @@ function createServer() {
                                 default: false,
                             },
                         },
-                        required: ["session_id"],
+                        required: ["pane"],
                     },
                 },
             ],
